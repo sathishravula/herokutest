@@ -39,6 +39,8 @@ dependencies {
     runtime("org.postgresql:postgresql:9.4-1201-jdbc41")
     compile("org.apache.commons:commons-collections4:4.0")
     compile("org.apache.tomcat.embed:tomcat-embed-jasper")
+    compile("javax.servlet.jsp:jsp-api:2.2.1-b03")
+    compile("javax.servlet:jstl")
 }
 
 
