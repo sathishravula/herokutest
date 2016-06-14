@@ -2,6 +2,8 @@ package com.example;
 
 import org.apache.commons.collections4.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -9,10 +11,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -30,7 +36,7 @@ public class GreetingController {
 
 
     @RequestMapping(value = "/greeting", method = RequestMethod.GET)
-    public Map<String, String> greeting(@RequestParam(value = "email", defaultValue = "sathish") String email, @RequestParam(value = "password") String password,@RequestParam(value = "role") String role) {
+    public Map<String, String> greeting(@RequestParam(value = "email",required = true) String email, @RequestParam(value = "password") String password,@RequestParam(value = "role") String role) {
         Map<String, String> stringMap =service.createUser(email, password, role);
         return stringMap;
     }
@@ -90,5 +96,29 @@ public class GreetingController {
         }
     }
 
+
+//    @ExceptionHandler(Exception.class)
+//    public ModelAndView handleError(HttpServletRequest req, Exception exception) {
+//        System.out.println("Request: " + req.getRequestURL() + " ------ " + exception.getMessage());
+//
+//        ModelAndView mav = new ModelAndView();
+//        mav.addObject("exception", exception);
+//        mav.addObject("url", req.getRequestURL());
+//        mav.setViewName("error");
+//        return mav;
+//    }
+
+
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Response> rulesForCustomerNotFound(HttpServletRequest req, Exception e)
+    {
+
+        System.out.println("Request: " + req.getRequestURL() + " ++++++ " + e.getMessage());
+        Response error = new Response();
+        error.setStatus(400);
+        error.setMessage(e.getLocalizedMessage());
+        return new ResponseEntity<Response>(error, HttpStatus.OK);
+    }
 
 }
