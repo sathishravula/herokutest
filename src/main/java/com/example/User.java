@@ -4,7 +4,6 @@ package com.example;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.context.annotation.Role;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,22 +17,27 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String email;
-    private String password;
-    private boolean receiveNotification;
-    private String disableNotificationReason;
-    private String fbId;
-    private String googleId;
-    private String authToken;
+    @Column(name = "id", nullable = false, updatable = false)
+    private Long id;
 
-    public int getId() {
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
+
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -45,52 +49,20 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
-    public boolean isReceiveNotification() {
-        return receiveNotification;
+    public Role getRole() {
+        return role;
     }
 
-    public void setReceiveNotification(boolean receiveNotification) {
-        this.receiveNotification = receiveNotification;
-    }
-
-    public String getDisableNotificationReason() {
-        return disableNotificationReason;
-    }
-
-    public void setDisableNotificationReason(String disableNotificationReason) {
-        this.disableNotificationReason = disableNotificationReason;
-    }
-
-    public String getFbId() {
-        return fbId;
-    }
-
-    public void setFbId(String fbId) {
-        this.fbId = fbId;
-    }
-
-    public String getGoogleId() {
-        return googleId;
-    }
-
-    public void setGoogleId(String googleId) {
-        this.googleId = googleId;
-    }
-
-    public String getAuthToken() {
-        return authToken;
-    }
-
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override
@@ -98,12 +70,8 @@ public class User implements Serializable {
         return "User{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", receiveNotification=" + receiveNotification +
-                ", disableNotificationReason='" + disableNotificationReason + '\'' +
-                ", fbId='" + fbId + '\'' +
-                ", googleId='" + googleId + '\'' +
-                ", authToken='" + authToken + '\'' +
+                ", passwordHash='" + passwordHash + '\'' +
+                ", role=" + role +
                 '}';
     }
 }

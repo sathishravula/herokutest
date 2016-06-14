@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class WelcomeController {
     @RequestMapping("/")
     public String welcome() {
-        return "login";
-    }
-
-    @RequestMapping("/signin")
-    public String showForm() {
-        System.out.println("hello");
         return "hello";
     }
+    @RequestMapping("/hai")
+    public String welcomeUser() {
+        return "welcome-user";
+    }
+
 }

@@ -12,6 +12,6 @@
 </head>
 <body>
 <h1>hello world </h1>
-<a href="/signin">Sign up</a>
+<a href="/login">Sign up</a>
 </body>
 </html>

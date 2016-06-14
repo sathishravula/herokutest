@@ -2,7 +2,11 @@ package com.example;
 
 import org.apache.commons.collections4.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,23 +18,24 @@ import java.util.*;
 /**
  * Created by sathish on 23/12/15.
  */
+@SuppressWarnings("ALL")
 @RestController
-@Repository
+@Component
 public class GreetingController {
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    Service service;
+
+
 
     @RequestMapping(value = "/greeting", method = RequestMethod.GET)
-    public Map<String, String> greeting(@RequestParam(value = "email", defaultValue = "sathish") String email, @RequestParam(value = "password") String password) {
-        Map<String, String> stringMap = new HashMap<>();
-        stringMap.put("status", "success");
-        stringMap.put("message", "user registered successfully");
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
-        accountRepository.save(user);
+    public Map<String, String> greeting(@RequestParam(value = "email", defaultValue = "sathish") String email, @RequestParam(value = "password") String password,@RequestParam(value = "role") String role) {
+        Map<String, String> stringMap =service.createUser(email, password, role);
         return stringMap;
     }
+
+
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public List<User> user() {
